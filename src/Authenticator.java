@@ -127,7 +127,7 @@ public class Authenticator
         char[] stringAsChars = pwConcat.toCharArray();
         
         // Converts hash to chars
-        char[] hashAsChars = new char[password.length()];
+        char[] hashAsChars = new char[pwConcat.length()];
         
         for(int charAt = 0; charAt < stringAsChars.length; charAt++)
 		{
