@@ -1,21 +1,25 @@
 import java.util.ArrayList;
+import java.util.Random;
 import java.util.Scanner;
-import java.security.SecureRandom;
 
-/**
- * 
- */
 
 /**
  * @author Andhy Gomez
- *
+ * St. Thomas University
+ * 
+ * Description: Program that will allow a user to either Add a user,
+ * remove a user, or sign in.
  */
 public class Authenticator 
 {
-	static // Create each array list object
+	static // Create array list object
 	ArrayList<User> credentials = new ArrayList<User>();
 	
+	private static final String SALTBANK = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$~%^&*?.,";
+	
 	/**
+	 * Description: Entry point of program with main menu
+	 * 
 	 * @param args
 	 */
 	public static void main(String[] args) 
@@ -52,7 +56,7 @@ public class Authenticator
 					password = keyboard.nextLine();
 					
 					// Generate salt & hash
-					pwSalt = "";
+					pwSalt = generateSalt();
 					pwHash = generateHash(password, pwSalt);
 							
 					// Create new user instance with information entered
@@ -72,11 +76,17 @@ public class Authenticator
 					break;
 				default:
 					System.out.println("Invalid input, please try again.");
-					}
+			}
 					
-				}while(!choice.equals("4"));
+		}while(!choice.equals("4"));
 	}
 	
+	/**
+	 * Description: adds a user to arraylist
+	 * 
+	 * @param user User instance containing username, salt, and hash
+	 * @return 1 or 0 if user was added or not
+	 */	
 	public static int addUser(User user)
 	{
 		// Add user
@@ -95,23 +105,38 @@ public class Authenticator
 		return false;	
 	}
 	
-	public static String generateSalt(String password);
+	/**
+	 * Description: Generate salt to aid password security
+	 * 
+	 * @return generated salt
+	 */	
+	public static String generateSalt();
 	{
-		final int SALTSIZE = 16;
+		final int SALTSIZE = 5;
 		
-		String passwordSalt;	
+		String passwordSalt;
 		
-		byte[] arraySalt = new byte[SALTSIZE];
+		StringBuilder generatedSalt = new StringBuilder();
+	
+		for(int i = 0; i <  SALTSIZE; i++)
+		{
+			int character = (int)(Math.random()*SALTBANK.length());
+			generatedSalt.append(SALTBANK.charAt(character));
+		}
 		
-		SecureRandom salt = new SecureRandom();
-		
-		salt.nextBytes(arraySalt);
-		
-		
+		passwordSalt = generatedSalt.toString();
 		
 		return passwordSalt;
 	}
 	
+	/**
+	 * Description: Generates a hashcode of a concatenation of the users entered
+	 * password and the password salt
+	 * 
+	 * @param password user entered password as a string
+	 * @param passwordSalt randomly generated salt as a string
+	 * @return hashed password
+	 */
 	public static String generateHash(String password, String passwordSalt)
 	{
 		String pwConcat;
@@ -120,34 +145,34 @@ public class Authenticator
 		
 		pwConcat = password.concat(passwordSalt);
 		
-        // Create a new int array
-        int[] asciiHash = new int[pwConcat.length()];
-        
-        // Converts string to char array
-        char[] stringAsChars = pwConcat.toCharArray();
-        
-        // Converts hash to chars
-        char[] hashAsChars = new char[pwConcat.length()];
-        
-        for(int charAt = 0; charAt < stringAsChars.length; charAt++)
-		{
-        	ascii = stringAsChars[charAt];
+        	// Create a new int array
+        	int[] asciiHash = new int[pwConcat.length()];
         	
-        	asciiHash[charAt] = ascii + 1;
+        	// Converts string to char array
+        	char[] stringAsChars = pwConcat.toCharArray();
+        
+        	// Converts hash to chars
+        	char[] hashAsChars = new char[pwConcat.length()];
+        
+        	for(int charAt = 0; charAt < stringAsChars.length; charAt++)
+		{
+        		ascii = stringAsChars[charAt];
+        		
+        		asciiHash[charAt] = ascii + 1;
 		}
         
-        //System.out.print("Hash: ");
+    
         
-        for (int i = 0; i < asciiHash.length; i++) 
-        {
-        	hashToChar = (char) asciiHash[i];
+        	for (int i = 0; i < asciiHash.length; i++) 
+        	{
+        		hashToChar = (char) asciiHash[i];
         	
-        	hashAsChars[i] = hashToChar;
-        }
+        		hashAsChars[i] = hashToChar;
+       		}
         
-        String passwordHash = new String(hashAsChars);
+        	String passwordHash = new String(hashAsChars);
         
-        return passwordHash;
+        	return passwordHash;
 	}
 
 }
