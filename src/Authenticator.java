@@ -12,21 +12,22 @@ import java.security.SecureRandom;
  */
 public class Authenticator 
 {
-
+	static // Create each array list object
+	ArrayList<User> userList = new ArrayList<User>();
+	
 	/**
 	 * @param args
 	 */
 	public static void main(String[] args) 
-	{
-		// Create each array list object
-		ArrayList<User> userList = new ArrayList<User>();
-		
+	{	
 		// Initialize variables
 		String choice;
 		String username;
 		String password;
 		String pwSalt;
 		String pwHash;
+		
+		int userAdded;
 				
 		// Create a new scanner object
 		Scanner keyboard = new Scanner(System.in);
@@ -58,7 +59,8 @@ public class Authenticator
 					User user = new User(username, pwSalt, pwHash);
 							
 					// Add contact
-					userList.add(user);
+					userAdded = addUser(user);
+						
 					break;
 				case "2": // Display Contacts
 					break;
@@ -75,12 +77,15 @@ public class Authenticator
 				}while(!choice.equals("4"));
 	}
 	
-	public int addUser(String user)
+	public static int addUser(User user)
 	{
-		return 0;	
+		// Add contact
+		userList.add(user);
+		
+		return 1;	
 	}
 	
-	public User removeUser(String user)
+	public static User removeUser(String user)
 	{
 		return null;
 	}
