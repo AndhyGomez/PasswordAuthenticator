@@ -58,13 +58,13 @@ public class Authenticator
 					// Create new contact object with information entered
 					User user = new User(username, pwSalt, pwHash);
 							
-					// Add contact
+					// Add user
 					userAdded = addUser(user);
 						
 					break;
-				case "2": // Display Contacts
+				case "2": // Remove a user
 					break;
-				case "3":
+				case "3": // Sign in
 						
 					break;
 				case "4":
@@ -79,7 +79,7 @@ public class Authenticator
 	
 	public static int addUser(User user)
 	{
-		// Add contact
+		// Add user
 		userList.add(user);
 		
 		return 1;	
