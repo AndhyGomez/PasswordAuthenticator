@@ -13,7 +13,7 @@ import java.security.SecureRandom;
 public class Authenticator 
 {
 	static // Create each array list object
-	ArrayList<User> userList = new ArrayList<User>();
+	ArrayList<User> credentials = new ArrayList<User>();
 	
 	/**
 	 * @param args
@@ -55,7 +55,7 @@ public class Authenticator
 					pwSalt = "";
 					pwHash = generateHash(password, pwSalt);
 							
-					// Create new contact object with information entered
+					// Create new user instance with information entered
 					User user = new User(username, pwSalt, pwHash);
 							
 					// Add user
@@ -80,7 +80,7 @@ public class Authenticator
 	public static int addUser(User user)
 	{
 		// Add user
-		userList.add(user);
+		credentials.add(user);
 		
 		return 1;	
 	}
