@@ -30,8 +30,11 @@ public class Authenticator
 		String password;
 		String pwSalt;
 		String pwHash;
+		String userToRemove;
 		
 		int userAdded;
+		
+		boolean credentialsValid = false;
 				
 		// Create a new scanner object
 		Scanner keyboard = new Scanner(System.in);
@@ -39,10 +42,10 @@ public class Authenticator
 		do
 		{
 			System.out.println("Would you like to");
-			System.out.println("1) Add a user \n");
-			System.out.println("2) Remove a user \n");
-			System.out.println("3) Sign in \n");
-			System.out.println("4) Exit the program \n");
+			System.out.print("1) Add a user \n");
+			System.out.print("2) Remove a user \n");
+			System.out.print("3) Sign in \n");
+			System.out.print("4) Exit the program \n");
 				
 			choice = keyboard.nextLine();
 					
@@ -63,13 +66,39 @@ public class Authenticator
 					User user = new User(username, pwSalt, pwHash);
 							
 					// Add user
-					userAdded = addUser(user);
-						
+					userAdded = addUser(user);				
 					break;
 				case "2": // Remove a user
+					System.out.println("Enter the username of the user you would like to remove.");
+					userToRemove = keyboard.nextLine();
+					
+					for(User index: credentials)
+					{
+						String currentUser = index.username;
+						
+						if(currentUser.equals(userToRemove))
+						{
+							removeUser(userToRemove);
+						}
+					}
 					break;
 				case "3": // Sign in
-						
+					// Obtain information
+					System.out.print("Enter username: ");
+					username = keyboard.nextLine();
+					System.out.print("Enter password: ");
+					password = keyboard.nextLine();
+					
+					credentialsValid = isUserValid(username, password);
+					
+					if(credentialsValid)
+					{
+						System.out.println("You have successfully signed in.");
+					}
+					else
+					{
+						System.out.println("Your credentials were invalid.");
+					}
 					break;
 				case "4":
 					System.out.println("Exiting program. Goodbye.");
@@ -101,9 +130,9 @@ public class Authenticator
 	 * @param user
 	 * @return null
 	 */
-	public static User removeUser(String user)
+	public static User removeUser(String username)
 	{
-		String userToSearch = user.username;
+		String userToSearch = username;
 		
 		for(User index: credentials)
 		{
@@ -114,12 +143,42 @@ public class Authenticator
 				credentials.remove(index);
 			}
 		}
+		
 		return null;
 	}
 	
-	public boolean isUserValid(String username, String password)
+	/**
+	 * Description: Checks if user credentials are valid
+	 * 
+	 * @param username 
+	 * @param password
+	 * @return true if credentials are valid, false otherwise
+	 */	
+	public static boolean isUserValid(String username, String password)
 	{
-		return false;	
+		String userSalt;
+		String userPw;
+		String hash;
+		
+		boolean isUserValid = false;
+		
+		for(User index: credentials)
+		{
+			if(username.equals(index.username))
+			{
+				userSalt = index.salt;
+				userPw = password;
+				
+				hash = generateHash(userPw, userSalt);
+				
+				if(hash.equals(index.passwordHash))
+				{
+					isUserValid = true;
+				}
+			}
+		}
+		
+		return isUserValid;		
 	}
 	
 	/**
