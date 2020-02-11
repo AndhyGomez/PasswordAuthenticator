@@ -2,7 +2,6 @@ import java.util.ArrayList;
 import java.util.Random;
 import java.util.Scanner;
 
-
 /**
  * @author Andhy Gomez
  * St. Thomas University
@@ -60,13 +59,13 @@ public class Authenticator
 					
 					// Generate salt & hash
 					pwSalt = generateSalt();
-					pwHash = generateHash(password, pwSalt);
-							
+					pwHash = generateHash(password, pwSalt);		
+					
 					// Create new user instance with information entered
 					User user = new User(username, pwSalt, pwHash);
 							
 					// Add user
-					userAdded = addUser(user);				
+					userAdded = addUser(user);
 					break;
 				case "2": // Remove a user
 					System.out.println("Enter the username of the user you would like to remove.");
@@ -103,6 +102,16 @@ public class Authenticator
 				case "4":
 					System.out.println("Exiting program. Goodbye.");
 					break;
+				case "5": // Display users (troubleshooting)
+					for(User index: credentials)
+					{
+						System.out.println("User " + index);
+						System.out.println("Username:" + index.username);
+						System.out.println("Salt: " + index.salt);
+						System.out.println("Hash: " + index.passwordHash);
+						System.out.println("------------------");
+					}
+					break;
 				default:
 					System.out.println("Invalid input, please try again.");
 			}
@@ -115,13 +124,14 @@ public class Authenticator
 	 * 
 	 * @param user User instance containing username, salt, and hash
 	 * @return 1 or 0 if user was added or not
-	 */	
+	 */
 	public static int addUser(User user)
-	{
+	{	
 		// Add user
 		credentials.add(user);
 		
-		return 1;	
+		return 1;
+		
 	}
 	
 	/**
@@ -153,7 +163,7 @@ public class Authenticator
 	 * @param username 
 	 * @param password
 	 * @return true if credentials are valid, false otherwise
-	 */	
+	 */
 	public static boolean isUserValid(String username, String password)
 	{
 		String userSalt;
@@ -178,15 +188,15 @@ public class Authenticator
 			}
 		}
 		
-		return isUserValid;		
+		return isUserValid;	
 	}
 	
 	/**
 	 * Description: Generate salt to aid password security
 	 * 
 	 * @return generated salt
-	 */	
-	public static String generateSalt();
+	 */
+	public static String generateSalt()
 	{
 		final int SALTSIZE = 5;
 		
@@ -221,34 +231,35 @@ public class Authenticator
 		
 		pwConcat = password.concat(passwordSalt);
 		
-        	// Create a new int array
-        	int[] asciiHash = new int[pwConcat.length()];
-        	
-        	// Converts string to char array
-        	char[] stringAsChars = pwConcat.toCharArray();
+        // Create a new int array
+        int[] asciiHash = new int[pwConcat.length()];
         
-        	// Converts hash to chars
-        	char[] hashAsChars = new char[pwConcat.length()];
+        // Converts string to char array
+        char[] stringAsChars = pwConcat.toCharArray();
         
-        	for(int charAt = 0; charAt < stringAsChars.length; charAt++)
+        // Converts hash to chars
+        char[] hashAsChars = new char[pwConcat.length()];
+        
+        for(int charAt = 0; charAt < stringAsChars.length; charAt++)
 		{
-        		ascii = stringAsChars[charAt];
-        		
-        		asciiHash[charAt] = ascii + 1;
+        	ascii = stringAsChars[charAt];
+        	
+        	asciiHash[charAt] = ascii + 1;
 		}
         
-    
         
-        	for (int i = 0; i < asciiHash.length; i++) 
-        	{
-        		hashToChar = (char) asciiHash[i];
+        for (int i = 0; i < asciiHash.length; i++) 
+        {
+        	hashToChar = (char) asciiHash[i];
         	
-        		hashAsChars[i] = hashToChar;
-       		}
+        	hashAsChars[i] = hashToChar;
+        }
         
-        	String passwordHash = new String(hashAsChars);
+        String passwordHash = new String(hashAsChars);
         
-        	return passwordHash;
+        return passwordHash;
 	}
 
 }
+
+
