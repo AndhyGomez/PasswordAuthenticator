@@ -95,8 +95,25 @@ public class Authenticator
 		return 1;	
 	}
 	
+	/**
+	 * Description: Method removes a desired user
+	 * 
+	 * @param user
+	 * @return null
+	 */
 	public static User removeUser(String user)
 	{
+		String userToSearch = user.username;
+		
+		for(User index: credentials)
+		{
+			if(userToSearch.equals(index.username))
+			{
+				System.out.println("User: " + index.username + ", has been removed.");
+				
+				credentials.remove(index);
+			}
+		}
 		return null;
 	}
 	
