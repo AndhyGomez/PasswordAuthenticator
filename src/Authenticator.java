@@ -273,6 +273,11 @@ public class Authenticator
         return passwordHash;
 	}
 	
+	/**
+	 * Description: Writes users info to csv file
+	 * 
+	 * @throws IOException
+	 */
 	public static void writeUsers() throws IOException
 	{
 		File file = new File("Users.csv");
@@ -282,9 +287,10 @@ public class Authenticator
 		
 		int countUsers = 1;
 		
+		outputFile.println("UserID, Username, Salt, Hash");
+		
 		for(User index: credentials)
 		{
-			outputFile.println("UserID, Username, Salt, Hash");
 			outputFile.println(countUsers + "," + index.username + "," + index.salt + "," + index.passwordHash);
 			countUsers++;
 		}
