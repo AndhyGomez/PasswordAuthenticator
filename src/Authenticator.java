@@ -2,6 +2,11 @@ import java.util.ArrayList;
 import java.util.Random;
 import java.util.Scanner;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
+
 /**
  * @author Andhy Gomez
  * St. Thomas University
@@ -20,8 +25,9 @@ public class Authenticator
 	 * Description: Entry point of program with main menu
 	 * 
 	 * @param args
+	 * @throws IOException 
 	 */
-	public static void main(String[] args) 
+	public static void main(String[] args) throws IOException 
 	{	
 		// Initialize variables
 		String choice;
@@ -59,7 +65,12 @@ public class Authenticator
 					
 					// Generate salt & hash
 					pwSalt = generateSalt();
-					pwHash = generateHash(password, pwSalt);		
+					pwHash = generateHash(password, pwSalt);
+					
+					//System.out.println(pwSalt);
+					
+					//System.out.println(password + pwSalt);
+					//System.out.println(pwHash);		
 					
 					// Create new user instance with information entered
 					User user = new User(username, pwSalt, pwHash);
@@ -117,6 +128,8 @@ public class Authenticator
 			}
 					
 		}while(!choice.equals("4"));
+		
+		writeUsers();
 	}
 	
 	/**
@@ -259,7 +272,29 @@ public class Authenticator
         
         return passwordHash;
 	}
+	
+	public static void writeUsers() throws IOException
+	{
+		File file = new File("Users.csv");
+		
+		FileWriter fw = new FileWriter(file, true);
+		PrintWriter outputFile = new PrintWriter(fw);
+		
+		int countUsers = 1;
+		
+		for(User index: credentials)
+		{
+			outputFile.println("UserID, Username, Salt, Hash");
+			outputFile.println(countUsers + "," + index.username + "," + index.salt + "," + index.passwordHash);
+			countUsers++;
+		}
+		
+		// Close the file
+		outputFile.close();
+	}
 
 }
+
+
 
 
